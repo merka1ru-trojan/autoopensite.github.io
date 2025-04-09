@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Яндекс Диск Автооткрыватель</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #005bd1;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .start-btn {
+            background-color: #005bd1;
+            color: white;
+        }
+        .start-btn:hover {
+            background-color: #004baa;
+        }
+        .stop-btn {
+            background-color: #ff5252;
+            color: white;
+        }
+        .stop-btn:hover {
+            background-color: #e04848;
+        }
+        .stat {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        #counter {
+            font-weight: bold;
+            color: #005bd1;
+            font-size: 1.2rem;
+        }
+        .small-text {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Яндекс Диск Автооткрыватель</h1>
+        
+        <div class="controls">
+            <div>
+                <label for="interval">Интервал открытия (мс):</label>
+                <input type="number" id="interval" value="1" min="1" max="10000">
+            </div>
+            
+            <div>
+                <label for="duration">Время показа окна (мс):</label>
+                <input type="number" id="duration" value="2" min="1" max="10000">
+            </div>
+            
+            <div class="button-row">
+                <button class="start-btn" id="startButton">Запустить</button>
+                <button class="stop-btn" id="stopButton" disabled>Остановить</button>
+            </div>
+        </div>
+        
+        <div class="stat">
+            Открыто раз: <span id="counter">0</span>
+        </div>
+        
+        <p class="small-text">
+            URL: https://disk.yandex.ru/d/SxD2xQfACwsrng<br>
+            Внимание: некоторые браузеры могут блокировать всплывающие окна
+        </p>
+    </div>
+    
+    <script>
+        const targetUrl = 'https://disk.yandex.ru/d/SxD2xQfACwsrng';
+        const intervalInput = document.getElementById('interval');
+        const durationInput = document.getElementById('duration');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const counter = document.getElementById('counter');
+        
+        let isRunning = false;
+        let intervalId = null;
+        let windowRef = null;
+        let count = 0;
+        
+        // Функция запуска
+        function startOpener() {
+            const interval = parseInt(intervalInput.value);
+            const duration = parseInt(durationInput.value);
+            
+            if (interval < 1 || isNaN(interval)) {
+                alert('Интервал должен быть не менее 1 мс');
+                return;
+            }
+            
+            if (duration < 1 || isNaN(duration)) {
+                alert('Длительность должна быть не менее 1 мс');
+                return;
+            }
+            
+            isRunning = true;
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            intervalInput.disabled = true;
+            durationInput.disabled = true;
+            
+            // Функция открытия и закрытия
+            function cycleOpen() {
+                if (!isRunning) return;
+                
+                // Закрываем предыдущее окно, если оно еще открыто
+                if (windowRef && !windowRef.closed) {
+                    try {
+                        windowRef.close();
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+                
+                try {
+                    // Открываем новое окно
+                    windowRef = window.open(targetUrl, '_blank');
+                    count++;
+                    counter.textContent = count;
+                    
+                    // Закрываем окно через заданное время
+                    setTimeout(() => {
+                        if (windowRef && !windowRef.closed) {
+                            windowRef.close();
+                        }
+                    }, duration);
+                } catch (e) {
+                    console.error(e);
+                    stopOpener();
+                    alert('Ошибка при открытии окна: ' + e.message);
+                }
+            }
+            
+            // Запускаем первый цикл сразу
+            cycleOpen();
+            
+            // Устанавливаем интервал для последующих циклов
+            intervalId = setInterval(cycleOpen, interval);
+        }
+        
+        // Функция остановки
+        function stopOpener() {
+            if (!isRunning) return;
+            
+            isRunning = false;
+            
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            
+            if (windowRef && !windowRef.closed) {
+                try {
+                    windowRef.close();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+            
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            intervalInput.disabled = false;
+            durationInput.disabled = false;
+        }
+        
+        // Привязываем события
+        startButton.addEventListener('click', startOpener);
+        stopButton.addEventListener('click', stopOpener);
+        
+        // Останавливаем при закрытии страницы
+        window.addEventListener('beforeunload', stopOpener);
+    </script>
+</div>
+</body>
+</html> 

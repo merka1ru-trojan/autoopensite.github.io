@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авто-запуск</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #e53935;
+            font-size: 1.5rem;
+        }
+        .counter-box {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #e53935;
+        }
+        .status {
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c62828;
+        }
+        button:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Яндекс.Диск Автооткрыватель</h1>
+        <div class="status" id="statusElement">
+            Автоматическое открытие запущено
+        </div>
+        
+        <div class="counter-box">
+            <span id="counterElement">0</span> открытий
+        </div>
+        
+        <button id="stopButton">Остановить</button>
+    </div>
+    
+    <script>
+        // Сразу запускается при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const targetUrl = 'https://disk.yandex.ru/d/SxD2xQfACwsrng';
+            const openDuration = 2; // 2 мс
+            const openInterval = 1; // 1 мс
+            
+            const statusElement = document.getElementById('statusElement');
+            const counterElement = document.getElementById('counterElement');
+            const stopButton = document.getElementById('stopButton');
+            
+            let windowRef = null;
+            let intervalId = null;
+            let count = 0;
+            let isRunning = false;
+            
+            // Функция открытия-закрытия окна
+            function openCloseWindow() {
+                if (!isRunning) return;
+                
+                // Закрываем предыдущее окно, если оно еще открыто
+                if (windowRef && !windowRef.closed) {
+                    try {
+                        windowRef.close();
+                    } catch (e) {
+                        console.error('Ошибка при закрытии окна:', e);
+                    }
+                }
+                
+                try {
+                    // Открываем новое окно
+                    windowRef = window.open(targetUrl, '_blank');
+                    
+                    // Увеличиваем счетчик
+                    count++;
+                    counterElement.textContent = count;
+                    
+                    // Закрываем окно через указанное время
+                    setTimeout(() => {
+                        if (windowRef && !windowRef.closed) {
+                            windowRef.close();
+                        }
+                    }, openDuration);
+                } catch (e) {
+                    console.error('Ошибка при открытии окна:', e);
+                    stopAutoOpen();
+                    statusElement.textContent = 'Ошибка: ' + e.message;
+                    statusElement.style.backgroundColor = '#ffebee';
+                }
+            }
+            
+            // Функция запуска
+            function startAutoOpen() {
+                isRunning = true;
+                statusElement.textContent = 'Автоматическое открытие запущено';
+                statusElement.style.backgroundColor = '#e8f5e9';
+                stopButton.disabled = false;
+                
+                // Запускаем первый цикл сразу
+                openCloseWindow();
+                
+                // Запускаем интервал для последующих открытий
+                intervalId = setInterval(openCloseWindow, openInterval);
+            }
+            
+            // Функция остановки
+            function stopAutoOpen() {
+                if (!isRunning) return;
+                
+                isRunning = false;
+                
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+                
+                if (windowRef && !windowRef.closed) {
+                    try {
+                        windowRef.close();
+                    } catch (e) {
+                        console.error('Ошибка при закрытии окна:', e);
+                    }
+                }
+                
+                statusElement.textContent = 'Автоматическое открытие остановлено';
+                statusElement.style.backgroundColor = '#ffebee';
+                stopButton.disabled = true;
+            }
+            
+            // Обработчики событий
+            stopButton.addEventListener('click', stopAutoOpen);
+            
+            // Обработка закрытия страницы
+            window.addEventListener('beforeunload', stopAutoOpen);
+            
+            // Автоматический запуск при загрузке страницы
+            startAutoOpen();
+        });
+    </script>
+</body>
+</html> 

